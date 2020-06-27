@@ -155,7 +155,6 @@ def main():
     ### Quit game if user exits game loop
     quit_game(score["wins"], score["ties"], score["losses"])
 
-
     return 0
 
 
