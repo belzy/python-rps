@@ -96,7 +96,10 @@ def main():
 
     # 7. Display message based on result of comparision
     # 8. Update wins, ties, losses
-    def display_result_message_and_update_score(result):
+    def display_result_message_and_update_score(result, user, computer):
+
+        print(f'Your choice: {user}\nComputer choice: {computer}')
+
         if result == "tie":
             print(tie_message)
             score["ties"] += 1
@@ -118,7 +121,7 @@ def main():
     while user_choice != "quit":
         computer_choice = choice_options[random.randint(1, 3)]
         result = compare_choices_and_get_result(user_choice, computer_choice)
-        display_result_message_and_update_score(result)
+        display_result_message_and_update_score(result, user_choice, computer_choice)
         user_choice = get_user_choice(input_message)
 
         ### Quit game if user exits game loop
