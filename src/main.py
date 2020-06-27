@@ -5,35 +5,35 @@ import random
 def main():
 
     ### Necessary variables
-    score = {
-        "wins": 0,
-        "ties": 0,
-        "losses": 0
-    }
-
+    
+    # Constants
     welcome_message = "Welcome to Rock, Paper, Scissors!"
     historical_data_message = "Wins: %s, Ties: %s, Losses: %s"
-    input_message = "[1] rock   [2] paper   [3] scissors    [9] quit\n"
+    input_message = "[1] rock   [2] paper   [3] scissors   [4] Score   [9] quit\n"
     quit_message = "Thanks for playing Rock, Paper, Scissors"
     win_message = "Congratulations, you won!"
     loss_message = "Sorry, you lost!"
     tie_message = "It was a tie"
 
+    choice_options = {
+        1: "rock",
+        2: "paper",
+        3: "scissors",
+        4: "score",
+        9: "quit"
+    }
+
+    # Variables
     historical_data = {
         "wins": 0,
         "ties": 0,
         "losses": 0
     }
 
-    score["wins"] = historical_data["wins"]
-    score["ties"] = historical_data["ties"]
-    score["losses"] = historical_data["losses"]
-
-    choice_options = {
-        1: "rock",
-        2: "paper",
-        3: "scissors",
-        9: "quit"
+    score = {
+        "wins": 0,
+        "ties": 0,
+        "losses": 0
     }
 
     computer_choice = random.randint(1, 3)
@@ -124,15 +124,21 @@ def main():
     score = historical_data
     show_welcome_message(welcome_message)
     
-    ### First user choice
-    user_choice = get_user_choice(input_message)
-
     ### Game loop
     while user_choice != "quit":
+
+        # Player choices
+        user_choice = get_user_choice(input_message)
         computer_choice = choice_options[random.randint(1, 3)]
+
+        # Display score
+        if user_choice == 'score':
+            display_current_score(score['wins'], score['ties'], score['losses'])
+            continue
+
+        # Compare choices
         result = compare_choices_and_get_result(user_choice, computer_choice)
         display_result_message_and_update_score(result, user_choice, computer_choice)
-        user_choice = get_user_choice(input_message)
 
     ### Quit game if user exits game loop
     quit_game(score["wins"], score["ties"], score["losses"])
