@@ -80,10 +80,18 @@ def main():
         return choice_options[int(choice)]
 
     # 4.1 If quit, update text file with current wins, ties, losses data and exit game
-    def quit_game(wins, ties, losses):
+    def quit_game(wins, ties, losses, message=quit_message):
+
+        display_current_score(wins, ties, losses)
+        print(f'{message}')
+
         text_file = open("history.txt", "w")
         text_file.write(str(wins) + "," + str(ties) + "," + str(losses))
         text_file.close()
+
+    # 5. Display the current score
+    def display_current_score(wins, ties, losses):
+        print(f'Current Score:\nWins - {wins}\nTies - {ties}\nLosses - {losses}')
 
     # 6. Compare user choice and computer choice
     def compare_choices_and_get_result(user, computer):
@@ -109,9 +117,11 @@ def main():
         elif result == "loss":
             print(loss_message)
             score["losses"] += 1
+            
 
     ### Start of game
     historical_data = get_historical_data()
+    score = historical_data
     show_welcome_message(welcome_message)
     
     ### First user choice
@@ -124,8 +134,8 @@ def main():
         display_result_message_and_update_score(result, user_choice, computer_choice)
         user_choice = get_user_choice(input_message)
 
-        ### Quit game if user exits game loop
-        quit_game(score["wins"], score["ties"], score["losses"])
+    ### Quit game if user exits game loop
+    quit_game(score["wins"], score["ties"], score["losses"])
 
 
     return 0
