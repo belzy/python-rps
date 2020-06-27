@@ -1,39 +1,10 @@
 import sys
+import random
+
 
 def main():
 
     ### Necessary variables
-    # welcome_message
-    # historical_data_message
-    # quit_message
-    # win_message
-    # loss_message
-    # tie_message
-
-    # wins
-    # ties
-    # losses
-
-    # choice_options
-
-    # computer_choice
-    # user_choice
-
-    ### Procedures
-    # 1. Display welcome_message
-    # 2. Load historical data and populate variables with data
-    # 3. Display historical data message with historical data
-    # 4. Prompt user to make a choice between rock, paper, scissors, or quit
-    #   a. If quit, update text file with current wins, ties, losses data and exit game
-    #   b. If not quit, move to step 5
-    # 5. Computer makes a choice between rock, paper, and scissors
-    # 6. Compare user choice and computer choice
-    # 7. Display message based on result of comparison
-    # 8. Update wins, ties, and losses
-    # 9. Return to step 4
-
-    import random
-
     score = {
         "wins": 0,
         "ties": 0,
@@ -48,11 +19,11 @@ def main():
     loss_message = "Sorry, you lost!"
     tie_message = "It was a tie"
 
-    historical_data = { #TODO: Will need a function for loading historical data
+    historical_data = {
         "wins": 0,
         "ties": 0,
         "losses": 0
-    } 
+    }
 
     score["wins"] = historical_data["wins"]
     score["ties"] = historical_data["ties"]
@@ -68,11 +39,24 @@ def main():
     computer_choice = random.randint(1, 3)
     user_choice = None
 
-    ### 1. Display welcome message
+    ### Procedures
+    # 1. Display welcome_message
+    # 2. Load historical data and populate variables with data
+    # 3. Display historical data message with historical data
+    # 4. Prompt user to make a choice between rock, paper, scissors, or quit
+    #   a. If quit, update text file with current wins, ties, losses data and exit game
+    #   b. If not quit, move to step 5
+    # 5. Computer makes a choice between rock, paper, and scissors
+    # 6. Compare user choice and computer choice
+    # 7. Display message based on result of comparison
+    # 8. Update wins, ties, and losses
+    # 9. Return to step 4
+
+    # 1. Display welcome message
     def show_welcome_message(message="Hello world!"):
         print(message)
 
-    ### 2. Load historical data and populate variables with data
+    # 2. Load historical data and populate variables with data
     def get_historical_data():
 
         text_file = open("history.txt", "r")
@@ -85,21 +69,63 @@ def main():
             "losses": int(text_data[2])
         }
 
-    ### 3. Display historical data message with historical data
-    def show_historical_data_message(message, rps_data={"wins": 0, "ties": 0, "losses": 0}):
-        print(message % (rps_data["wins"], rps_data["ties"], rps_data["losses"]))
+    # 3. Display historical data message with historical data
+    def show_historical_data_message(message=historical_data_message, rps_data={"wins": 0, "ties": 0, "losses": 0}):
+        print(message %
+              (rps_data["wins"], rps_data["ties"], rps_data["losses"]))
 
-    ### 4. Prompt user to make a choice between rock, paper, scissors, or quit
-    def get_user_choice(message="Your Input"):
+    # 4. Prompt user to make a choice between rock, paper, scissors, or quit
+    def get_user_choice(message=input_message):
         choice = input(message)
         return choice_options[int(choice)]
 
-    ### 4.1 If quit, update text file with current wins, ties, losses data and exit game
+    # 4.1 If quit, update text file with current wins, ties, losses data and exit game
     def quit_game(wins, ties, losses):
         text_file = open("history.txt", "w")
         text_file.write(str(wins) + "," + str(ties) + "," + str(losses))
         text_file.close()
 
+    # 6. Compare user choice and computer choice
+    def compare_choices_and_get_result(user, computer):
+        if user == computer:
+            return "tie"
+        elif (user == "rock" and computer == "scissors") or (user == "paper" and computer == "rock") or (user == "scissors" and computer == "paper"):
+            return "win"
+        else:
+            return "loss"
+
+    # 7. Display message based on result of comparision
+    # 8. Update wins, ties, losses
+    def display_result_message_and_update_score(result):
+        if result == "tie":
+            print(tie_message)
+            score["ties"] += 1
+        elif result == "win":
+            print(win_message)
+            score["wins"] += 1
+        elif result == "loss":
+            print(loss_message)
+            score["losses"] += 1
+
+    ### Start of game
+    historical_data = get_historical_data()
+    show_welcome_message(welcome_message)
+    
+    ### First user choice
+    user_choice = get_user_choice(input_message)
+
+    ### Game loop
+    while user_choice != "quit":
+        computer_choice = choice_options[random.randint(1, 3)]
+        result = compare_choices_and_get_result(user_choice, computer_choice)
+        display_result_message_and_update_score(result)
+        user_choice = get_user_choice(input_message)
+
+        ### Quit game if user exits game loop
+        quit_game(score["wins"], score["ties"], score["losses"])
+
+
     return 0
+
 
 main()
